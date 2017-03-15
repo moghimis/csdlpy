@@ -123,8 +123,9 @@ def getdata (stationID,  dateRange,
                                 float(line[38:45]),
                                 float(line[46:53])])
             except: 
-                print line
                 pass
+    else:
+        print '[error]: product [' + product + '] is not yet implemented!'
         
     return {'dates' : dates, 'values' : values}       
 
