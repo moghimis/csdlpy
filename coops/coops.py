@@ -94,29 +94,26 @@ def getdata (stationID,  dateRange,
     ## Parse the response
     dates  = []
     values = []   
-    if ('waterlevel' in product):
-        for line in lines:
+    for line in lines:
+        if ('waterlevel' in product):
             try:
                 dates.append  (datetime.strptime(line[13:29],'%Y-%m-%d %H:%M'))
                 values.append (float(line[31:38]))
             except:
                 pass
-    elif product == 'predictions':
-        for line in lines:
+        elif product == 'predictions':
             try:
                 dates.append  (datetime.strptime(line[ 9:25],'%m/%d/%Y %H:%M'))
                 values.append (float(line[26:]))
             except: 
                 pass
-    elif product == 'barometricpressure':
-        for line in lines:
+        elif product == 'barometricpressure':
             try:
                 dates.append  (datetime.strptime(line[13:29],'%Y-%m-%d %H:%M'))
                 values.append (float(line[30:37]))
             except: 
                 pass
-    elif product == 'wind':
-        for line in lines:
+        elif product == 'wind':
             try:
                 dates.append  (datetime.strptime(line[13:29],'%Y-%m-%d %H:%M'))
                 values.append ([float(line[30:37]),
@@ -124,8 +121,9 @@ def getdata (stationID,  dateRange,
                                 float(line[46:53])])
             except: 
                 pass
-    else:
-        print '[error]: product [' + product + '] is not yet implemented!'
+        else:
+            print '[error]: product [' + product + '] is not yet implemented!'
+            break
         
     return {'dates' : dates, 'values' : values}       
 
