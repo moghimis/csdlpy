@@ -38,7 +38,7 @@ def getdata (stationID,  dateRange,
         'datum' (str): 'MSL' (=default), 'NAVD', 'IGLD', 'MTL',
             'station datum', 'MHW','MHHW','MLLW', 'MLW'.
         
-        'units' (str): 'meters','feet'.
+        'units' (str): 'meters','feet','knots','miles/hour'
         
         'tideFreq' (str): '6' (=default), '60'
         
