@@ -127,11 +127,53 @@ def getdata (stationID,  dateRange,
         
     return {'dates' : dates, 'values' : values}       
 
+
+#==============================================================================
+def getStationInfo (stationID):
+    
+    """
+    Downloads geographical information for a CO-OPS station
+    from http://tidesandcurrents.noaa.gov
+    
+    Args:
+        stationID (str):              7 character-long CO-OPS station ID
+    
+    Returns:
+        'info' (dict): ['name']['state']['lon']['lat']
+
+    Examples:
+        & getStationInfo('8518750')['name']
+        & 'The Battery'
+    """
+    request = ( 'https://tidesandcurrents.noaa.gov/stationhome.html?id=' +
+               stationID )
+    tmpFile  = wget.download   (request)
+    lines    = open(tmpFile).readlines()
+    os.remove (tmpFile)
+    
+    try:
+        for line in lines:
+            if 'var station_name'  in line:
+                stationName  = line.split('"')[1]
+            if 'var station_state' in line:
+                stationState = line.split('"')[1]
+            if 'var lat'           in line:
+                lat          = float(line.split('"')[1])
+            if 'var lon'           in line:
+                lon          = float(line.split('"')[1])           
+        
+        return {'name' : stationName, 'state' : stationState,
+                'lon'  : lon, 'lat' : lat }
+    except:
+        print '[error]: cannot get info for  ' + stationID
+        return None
+
 #==============================================================================
 if __name__ == "__main__":
 
-    ## Demo the method by downloading and plotting products at a station
+    ## Demo the methods by downloading and plotting products at a station
     stationID = '8454000'
+    info  = getStationInfo (stationID)
     now   = datetime.now()
     lday  = (now-dt(days=1), now)
     cwlev = getdata(stationID , lday)        
@@ -147,7 +189,7 @@ if __name__ == "__main__":
     f1 = plt.figure(figsize=(9,4))
     plt.plot(tides['dates'], tides['values'], label='tides',color='b')
     plt.plot(cwlev['dates'], cwlev['values'], label='cwlev',color='g')
-    plt.title('Water Levels at ' + stationID)
+    plt.title('Water Levels at ' + info['name'])
     plt.legend()
     ax1 = f1.gca()
     ax1.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))
