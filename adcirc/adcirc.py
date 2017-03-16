@@ -5,6 +5,7 @@ Created on Thu Mar 16 10:02:14 2017
 @author: Sergey.Vinogradov
 """
 import numpy as np
+import netCDF4
 
 #==============================================================================
 def readGrid ( gridFile ):
@@ -18,7 +19,7 @@ def readGrid ( gridFile ):
     http://adcirc.org/home/documentation/users-manual-v50/
     input-file-descriptions/adcirc-grid-and-boundary-information-file-fort-14/
     """
-    print '[info]: reading the grid from ' + gridFile + '.'
+    print '[info]: Reading the grid from ' + gridFile + '.'
     f  = open(gridFile)
     
     myDesc     = f.readline().rstrip()
@@ -29,12 +30,12 @@ def readGrid ( gridFile ):
     myPoints   = np.zeros([myNP,3], dtype=float)
     myElements = np.zeros([myNE,3], dtype=int)
     
-    print '[info]: reading grid points...'
+    print '[info]: Reading grid points...'
     for k in range(myNP):
         line            = f.readline().split()
         myPoints[k,0:2] = map(float, line[1:3])
 
-    print '[info]: reading grid elements...'
+    print '[info]: Reading grid elements...'
     for k in range(myNE):
         line              = f.readline().split()
         myElements[k,0:2] = map(int, line[2:4])
@@ -44,11 +45,11 @@ def readGrid ( gridFile ):
     myNVDLL  = np.zeros([myNOPE], dtype=int)
     myNBDV   = np.zeros([myNOPE, myNETA], dtype=int)
     
-    print '[info]: reading elevation-specified boundaries...'    
+    print '[info]: Reading elevation-specified boundaries...'    
     for k in range(myNOPE):
         myNVDLL [k] = int(f.readline().split()[0])
         for j in range(myNVDLL[k]):
-            myNBDV[k,j] = int(f.readline().rstrip())
+            myNBDV[k,j] = int(f.readline().strip())
 
     myNBOU = int(f.readline().split()[0])
     myNVEL = int(f.readline().split()[0])   
@@ -65,7 +66,7 @@ def readGrid ( gridFile ):
     myPIPECOEF   = np.zeros([myNBOU, myNVEL], dtype=float)
     myPIPEDIAM   = np.zeros([myNBOU, myNVEL], dtype=float)
     
-    print '[info]: reading normal flow-specified boundaries...'    
+    print '[info]: Reading normal flow-specified boundaries...'    
     for k in range(myNBOU):
         line = f.readline().split()
         myNVELL[k]  = int(line[0])
@@ -118,6 +119,57 @@ def readGrid ( gridFile ):
             }
 
 #==============================================================================
+def read2DField ( ncFile, ncVar ):  
+    """
+    Reads specified variable from the ADCIRC 2D netCDF output
+    and grid points along with validation time.
+    Args:
+        'ncFile' (str): full path to netCDF file
+        'ncVar'  (str): name of netCDF field
+    Returns:
+        dict: 'lon', 'lat', 'time', 'value', 'path', 'variable'
+    """
+    nc   = netCDF4.Dataset (ncFile)
+    lon  = nc.variables['x'][:]
+    lat  = nc.variables['y'][:]
+    tim  = nc.variables['time'][:]
+    fld  = nc.variables[ncVar][:]     
+    return { 'lon' : lon, 'lat' : lat, 'time' : tim, 'value' : fld, 
+            'path' : ncFile, 'variable' : ncVar}
+
+#==============================================================================
+def read2DField_ascii ( asciiFile ):
+    """
+    Reads ADCIRC 2D output file (e.g. mmaxele)
+    Args:
+        'asciiFile' (str): full path to ADCIRC 2D file in ASCII format
+    Returns:
+        value (np.array [NP, NS]), where NP - number of grid points, 
+                                     and NS - number of datasets
+    """
+    print '[info]: Reading ASCII file ' + asciiFile + '.'
+    f  = open(asciiFile)
+    
+    myDesc = f.readline().strip()
+    print '[info]: Field description [' + myDesc + '].'
+    line          = f.readline().split()    
+    myNDSETSE     = int(line[0])
+    myNP          = int(line[1])
+#    myNSPOOLGE    = int(line[3])
+#    myIRTYPE      = int(line[4])
+#    dtdpXnspoolge = float(line[2])   
+    line          = f.readline().split()
+#    myTIME        = float(line[0])
+#    myIT          = float(line[1])
+    value = np.zeros([myNP,myNDSETSE], dtype=float)
+    for s in range(myNDSETSE):
+        for n in range(myNP):
+            value[n,s] = float(f.readline().split()[1])    
+    value = np.squeeze(value)
+    
+    return value 
+
+#==============================================================================
 def readControlFile ( controlFile ):
     """
     Reads ADCIRC control file
@@ -150,8 +202,7 @@ def readFort15 ( fort15file ):
 #==============================================================================
 if __name__ == "__main__":
     
-    gridFile = \
-    "C:/Users/sergey.vinogradov/JET/stormsurge/mesh/CubaIkeModNOMAD1enoflux.grd"
+    gridFile = "fort.14"
     grid = readGrid ( gridFile )
     
     x = grid['Points'][:,0]
@@ -159,6 +210,6 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     plt.plot(x, y,'k.')
     plt.title(grid['GridDescription'])
-
-    
+#
+#    
     
