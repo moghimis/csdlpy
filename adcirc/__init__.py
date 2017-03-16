@@ -1,2 +1,2 @@
 from adcirc import *
-__all__=['adcirc']
+__all__ = ['adcirc']

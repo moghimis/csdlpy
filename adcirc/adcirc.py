@@ -156,8 +156,9 @@ if __name__ == "__main__":
     
     x = grid['Points'][:,0]
     y = grid['Points'][:,1]
-    import matplotlib
     import matplotlib.pyplot as plt
     plt.plot(x, y,'k.')
+    plt.title(grid['GridDescription'])
+
     
     
