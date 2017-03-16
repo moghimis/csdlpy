@@ -1,3 +1,5 @@
 # csdlpy
-csdlpy is a set of Python-based tools developed an used by numerical geophysical modelers at NOAA's Coast Survey Development Lab (CSDL).
+#
+#
+Areas of focus here are tools to work with ADCIRC model output, CO-OPS tide gauge data and so on.
 No warranty of suitability is implied. Use on your own risk.
