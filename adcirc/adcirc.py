@@ -18,11 +18,14 @@ def readGrid ( gridFile ):
     http://adcirc.org/home/documentation/users-manual-v50/
     input-file-descriptions/adcirc-grid-and-boundary-information-file-fort-14/
     """
-    print '[info]: reading the grid from [' + gridFile + ']'
+    print '[info]: reading the grid from ' + gridFile + '.'
     f  = open(gridFile)
     
     myDesc     = f.readline().rstrip()
     myNE, myNP = map(int, f.readline().split())    
+    print '[info]: Grid description ' + myDesc + '.'
+    print '[info]: Grid size: NE= '   + str(myNE) + ', NP=' + str(myNP) + '.'
+
     myPoints   = np.zeros([myNP,3], dtype=float)
     myElements = np.zeros([myNE,3], dtype=int)
     
@@ -94,9 +97,13 @@ def readGrid ( gridFile ):
 
     f.close()
         
-    return {'AGRID'  : myDesc, 'NE' : myNE, 'NP' : myNP, 
-            'Points' : myPoints, 'Elements' : myElements,
-            'NETA' : myNETA, 'NOPE'         : myNOPE,
+    return {'GridDescription'               : myDesc, 
+            'NE'                            : myNE, 
+            'NP'                            : myNP, 
+            'Points'                        : myPoints, 
+            'Elements'                      : myElements,
+            'NETA'                          : myNETA, 
+            'NOPE'                          : myNOPE,
             'ElevationBoundaries'           : myNBDV, 
             'NormalFlowBoundaries'          : myNBVV,
             'ExternalBarrierHeights'        : myBARLANHT,
@@ -109,6 +116,36 @@ def readGrid ( gridFile ):
             'BulkPipeFrictionFactors'       : myPIPECOEF,            
             'CrossBarrierPipeDiameter'      : myPIPEDIAM
             }
+
+#==============================================================================
+def readControlFile ( controlFile ):
+    """
+    Reads ADCIRC control file
+    """
+    print '[error]: not yet implemented'
+    return None
+
+#==============================================================================
+def readFort13 ( fort13file ):
+    """
+    Reads ADCIRC fort.13 file
+    """
+    print '[error]: not yet implemented'
+    return None
+
+#==============================================================================
+def readFort14 ( fort14file ):
+    """
+    Reads ADCIRC fort.14 file
+    """
+    return readGrid (fort14file)
+
+#==============================================================================
+def readFort15 ( fort15file ):
+    """
+    Reads ADCIRC fort.15 file
+    """
+    return readControlFile (fort15file)
 
 #==============================================================================
 if __name__ == "__main__":
