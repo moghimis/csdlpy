@@ -1,2 +1,2 @@
 from estofs import *
-__all__=['estofs']
+__all__ = ['estofs']
