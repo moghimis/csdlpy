@@ -6,24 +6,24 @@ No warranty of suitability is implied. Use on your own risk.
 
 Dev Plan
 
-[]
+[123] [1] - templates written, [2] - some functionality, [3] - full functionality
 
-[] csdlpy / coops -- tools for working with CO-OPS data
+[++-] csdlpy / coops -- tools for working with CO-OPS data
 
-[] csdlpy / adcirc -- ADCIRC-specific low-level functionalities
+[++-] csdlpy / adcirc -- ADCIRC-specific low-level functionalities
 
-[] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
+[+--] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
 
-[] csdlpy / hsofs  -- HSOFS specific functionalities built upon csdlpy / adcirc
+[---] csdlpy / hsofs  -- HSOFS specific functionalities built upon csdlpy / adcirc
 
-[] csdlpy / slosh  -- SLOSH-specific low-level functionalities
+[---] csdlpy / slosh  -- SLOSH-specific low-level functionalities
 
-[] csdlpy / etss   -- ETSS-specific functionalities built upon csdlpy / slosh 
+[---] csdlpy / etss   -- ETSS-specific functionalities built upon csdlpy / slosh 
 
-[] csdlpy / atcf   -- ATCF-format parsers
+[++-] csdlpy / atcf   -- ATCF-format parsers
 
-[] csdlpy / ecom   -- ECOM-specific low-level functionalities
+[---] csdlpy / ecom   -- ECOM-specific low-level functionalities
 
-[] csdlpy / roms   -- ROMS-specific low-level functionalities
+[---] csdlpy / roms   -- ROMS-specific low-level functionalities
 
-[] csdlpy / eval   -- skill assessment low-level functionalities
+[---] csdlpy / eval   -- skill assessment low-level functionalities
