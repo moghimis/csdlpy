@@ -21,7 +21,8 @@ def plotScatter ():
 #==============================================================================
 """
 """
-def plot2DFieldOnMap ( grid, maxele, titleStr='', saveFig=None):
+def plot2DFieldOnMap ( grid, maxele, titleStr='', saveFig=None, 
+                      clim=[0.0, 3.0]):
     
     print '[info]: plotting ' + titleStr    
     lon       = grid['lon']
@@ -32,6 +33,7 @@ def plot2DFieldOnMap ( grid, maxele, titleStr='', saveFig=None):
     
     # Set mask 
     # TODO : Optimize this following loop
+    #
     mask = np.ones(len(Tri.triangles), dtype=bool)
     count = 0
     for t in Tri.triangles:
@@ -52,10 +54,11 @@ def plot2DFieldOnMap ( grid, maxele, titleStr='', saveFig=None):
     m.drawparallels(parallels,labels=[1,0,0,0],fontsize=6)
     meridians = np.arange(-180,180,10)
     m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=6)
-    m.shadedrelief()
+    m.bluemarble() #m.shadedrelief()
     plt.title(titleStr)
+    plt.xlabel('LONGITUDE')
+    plt.ylabel('LATITUDE')
     
-    clim = [0, 3.0]
     myCmap = plt.cm.jet
     cs   = plt.tripcolor(Tri, z, shading='flat',\
                          edgecolors='none', \
