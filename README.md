@@ -18,6 +18,8 @@ Dev Plan
 
 [+--] csdlpy / transfer -- ftp and email-based file transfer tools
 
+[+--] csdlpy / plotter -- all plotting routines
+
 [---] csdlpy / hsofs  -- HSOFS specific functionalities built upon csdlpy / adcirc
 
 [---] csdlpy / slosh  -- SLOSH-specific low-level functionalities
