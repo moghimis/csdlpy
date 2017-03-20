@@ -1,5 +1,5 @@
 import adcirc
 import estofs
-import coops
+import obs
 import atcf
-__all__ = ['adcirc','estofs','coops','atcf']
+__all__ = ['adcirc','estofs','obs','atcf']
