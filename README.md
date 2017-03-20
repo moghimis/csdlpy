@@ -8,7 +8,7 @@ Dev Plan
 
 [123] [1] - templates written, [2] - some functionality, [3] - full functionality
 
-[++-] csdlpy / coops -- tools for working with CO-OPS data
+[++-] csdlpy / obs -- tools for working with CO-OPS and NDBC data
 
 [++-] csdlpy / adcirc -- ADCIRC-specific low-level functionalities
 
@@ -19,6 +19,8 @@ Dev Plan
 [---] csdlpy / slosh  -- SLOSH-specific low-level functionalities
 
 [---] csdlpy / etss   -- ETSS-specific functionalities built upon csdlpy / slosh 
+
+[---] csdlpy / gfs   -- tools for working with GFS output
 
 [++-] csdlpy / atcf   -- ATCF-format parsers
 
