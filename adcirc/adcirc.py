@@ -135,6 +135,8 @@ def read2DField ( ncFile, ncVar ):
     Returns:
         dict: 'lon', 'lat', 'time', 'value', 'path', 'variable'
     """
+    
+    print '[info]: reading [' + ncVar + '] from ' + ncFile
     nc   = netCDF4.Dataset (ncFile)
     lon  = nc.variables['x'][:]
     lat  = nc.variables['y'][:]
