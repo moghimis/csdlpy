@@ -38,7 +38,11 @@ def readGrid ( gridFile ):
     print '[info]: Reading grid elements...'
     for k in range(myNE):
         line              = f.readline().split()
-        myElements[k,0:2] = map(int, line[2:4])
+        #myElements[k,0:2] = map(int, line[2:4])
+        myElements[k,0] = int (line[2])
+        myElements[k,1] = int (line[3])
+        myElements[k,2] = int (line[4])
+
     
     myNOPE   = int(f.readline().split()[0])
     myNETA   = int(f.readline().split()[0])   
@@ -101,7 +105,9 @@ def readGrid ( gridFile ):
     return {'GridDescription'               : myDesc, 
             'NE'                            : myNE, 
             'NP'                            : myNP, 
-            'Points'                        : myPoints, 
+            'lon'                           : myPoints[:,0],
+            'lat'                           : myPoints[:,1], 
+            'depth'                         : myPoints[:,2], 
             'Elements'                      : myElements,
             'NETA'                          : myNETA, 
             'NOPE'                          : myNOPE,
@@ -133,7 +139,9 @@ def read2DField ( ncFile, ncVar ):
     lon  = nc.variables['x'][:]
     lat  = nc.variables['y'][:]
     tim  = nc.variables['time'][:]
-    fld  = nc.variables[ncVar][:]     
+    fld  = nc.variables[ncVar][:]         
+    fld.data [fld.data==fld.fill_value] = np.nan
+
     return { 'lon' : lon, 'lat' : lat, 'time' : tim, 'value' : fld, 
             'path' : ncFile, 'variable' : ncVar}
 
@@ -166,6 +174,9 @@ def read2DField_ascii ( asciiFile ):
         for n in range(myNP):
             value[n,s] = float(f.readline().split()[1])    
     value = np.squeeze(value)
+    
+    fill_value = -99999.0
+    value[value==fill_value]=np.nan
     
     return value 
 
@@ -205,10 +216,8 @@ if __name__ == "__main__":
     gridFile = "fort.14"
     grid = readGrid ( gridFile )
     
-    x = grid['Points'][:,0]
-    y = grid['Points'][:,1]
     import matplotlib.pyplot as plt
-    plt.plot(x, y,'k.')
+    plt.plot(grid['lon'], grid['lat'],'k.')
     plt.title(grid['GridDescription'])
 #
 #    
