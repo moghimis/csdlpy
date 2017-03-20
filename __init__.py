@@ -3,4 +3,5 @@ import estofs
 import obs
 import atcf
 import transfer
-__all__ = ['adcirc', 'estofs', 'obs', 'atcf', 'transfer']
+import plotter
+__all__ = ['adcirc', 'estofs', 'obs', 'atcf', 'transfer', 'plotter']
