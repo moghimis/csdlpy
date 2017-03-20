@@ -14,6 +14,10 @@ Dev Plan
 
 [+--] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
 
+[++-] csdlpy / atcf   -- ATCF-format parsers
+
+[+--] csdlpy / transfer -- ftp and email-based file transfer tools
+
 [---] csdlpy / hsofs  -- HSOFS specific functionalities built upon csdlpy / adcirc
 
 [---] csdlpy / slosh  -- SLOSH-specific low-level functionalities
@@ -22,10 +26,9 @@ Dev Plan
 
 [---] csdlpy / gfs   -- tools for working with GFS output
 
-[++-] csdlpy / atcf   -- ATCF-format parsers
-
 [---] csdlpy / ecom   -- ECOM-specific low-level functionalities
 
 [---] csdlpy / roms   -- ROMS-specific low-level functionalities
 
 [---] csdlpy / eval   -- skill assessment low-level functionalities
+
