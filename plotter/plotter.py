@@ -98,9 +98,8 @@ def plotSurfaceOnMap ( grid, surface,
 #==============================================================================
 if __name__ == "__main__":
 
-    grid   = adcirc.readGrid ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
-    maxele = adcirc.readSurfaceField ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/plotter/hsofs.al092008.2008091206.nhctrk.fields.maxele.nc', \
-                                      'zeta_max' ) 
+    grid   = adcirc.readGrid ('../adcirc/fort.14')    
+    maxele = adcirc.readSurfaceField ('maxele.nc', 'zeta_max' ) 
     
     # Demo unmasked array:
     cf1 = plotSurfaceOnMap (grid, grid['depth'], titleStr='Grid Depth', 
