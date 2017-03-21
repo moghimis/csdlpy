@@ -20,17 +20,21 @@ def plotScatter ():
 
 #==============================================================================
 def plotSurfaceOnMap ( grid, surface, 
-                      titleStr='', figFile='', clim=[0.0, 3.0]):
+                      titleStr='', figFile='', 
+                      clim=[0.0, 3.0], lonlim=None, latlim=None,
+                      bar_label='M MSL', mapResolution='c'):
     """
-    Plots a 2D field on top of a geographic map
+    Plots a field specified on an unstructured grid on a geographic map
     Args:
         grid    (dict)   : grid     as read by adcirc.readGrid ()
         surface (array or masked_array) : 
                    2d field as read by adcirc.readSurfaceField ()
     Optional:
-        titleStr  (str)       : plot title, (''=default)
-        figFile   (str)       : path for saving a figure (''=default)
-        clim ([float, float]) : color limits, ([0.0, 3.0] = default)
+        titleStr  (str)        : plot title, (''=default)
+        figFile   (str)        : path for saving a figure (''=default)
+        clim ([float, float])  : color limits, ([0.0, 3.0] = default)
+        lonlim([float, float]) : longitude limits, ([min, max] = default)
+        latlim([float, float]) : latitude  limits, ([min, max] = default)
     Returns:
         fig (matplotlib figure handle) 
     Uses:
@@ -42,13 +46,13 @@ def plotSurfaceOnMap ( grid, surface,
    #             -- will plot maxele field on the grid.            
     """
     
-    print '[info]: plotting ' + titleStr    
+    print '[info]: Plotting ' + titleStr    
     lon       = grid['lon']
     lat       = grid['lat']
     triangles = grid['Elements']
     z         = surface
     Tri       = tri.Triangulation(lon, lat, triangles=triangles-1)
-    
+        
     if hasattr(z,'mask'): 
         zmask = z.mask
     else:
@@ -65,16 +69,42 @@ def plotSurfaceOnMap ( grid, surface,
             mask[count-1] = False    
     Tri.set_mask = mask
     
+    if lonlim is None:
+        lonlim = [min(lon), max(lon)]
+    if latlim is None:
+        latlim = [min(lat), max(lat)]
+    dx = lonlim[1]-lonlim[0]
+    
+    #Set resolution depending on longitudinal swath
+    dparallels, dmeridians = 10., 10.    
+    if mapResolution == 'c':
+        if dx <= 30.0:
+            mapResolution = 'l'
+            dparallels = dmeridians = 4.0
+        if dx <= 15.0:
+            mapResolution = 'i'
+            dparallels = dmeridians = 2.0
+        if dx <=  5.0:
+            mapResolution = 'h'
+            dparallels = dmeridians = 1.0
+        if dx <=  1.0:
+            mapResolution = 'f'
+            dparallels = dmeridians = 0.1
+        print '[info]: Resolution is set to ' + mapResolution
+               
     fig = plt.figure(figsize=(9,9))    
     fig.add_axes([0.05,0.05,0.85,0.9])
-    m = Basemap(llcrnrlon=min(lon), llcrnrlat=min(lat),
-                urcrnrlon=max(lon), urcrnrlat=max(lat), resolution='l')
+    m = Basemap(llcrnrlon=lonlim[0], llcrnrlat=latlim[0],
+                urcrnrlon=lonlim[1], urcrnrlat=latlim[1], 
+                resolution=mapResolution)
     m.drawcoastlines()
     m.drawstates()
     m.drawcountries()
-    parallels = np.arange(-90,90,10)
+    if dx <= 0.5:
+        m.drawcounties()
+    parallels = np.arange(-90,90,dparallels)
     m.drawparallels(parallels,labels=[1,0,0,0],fontsize=6)
-    meridians = np.arange(-180,180,10)
+    meridians = np.arange(-180,180,dmeridians)
     m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=6)
     m.bluemarble() #m.shadedrelief()
     plt.title(titleStr)
@@ -86,7 +116,7 @@ def plotSurfaceOnMap ( grid, surface,
                          edgecolors='none', \
                          vmin=clim[0], vmax=clim[1], cmap=myCmap)
     cbar = m.colorbar(cs)
-    cbar.set_label('M MSL')    
+    cbar.set_label(bar_label)    
     
     if len(figFile):
         try:
@@ -98,14 +128,16 @@ def plotSurfaceOnMap ( grid, surface,
 #==============================================================================
 if __name__ == "__main__":
 
-    grid   = adcirc.readGrid ('../adcirc/fort.14')    
-    maxele = adcirc.readSurfaceField ('maxele.nc', 'zeta_max' ) 
+    grid   = adcirc.readGrid ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
+    maxele = adcirc.readSurfaceField ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/plotter/hsofs.al092008.2008091206.nhctrk.fields.maxele.nc', \
+                                      'zeta_max' ) 
     
     # Demo unmasked array:
-    cf1 = plotSurfaceOnMap (grid, grid['depth'], titleStr='Grid Depth', 
-                            figFile='hsofs.grid.depth.png', clim=[-100, 4000])
-    # Demo masked array:
-    cf2 = plotSurfaceOnMap (grid, maxele['value'], titleStr='Peak Flood', 
-                            figFile='hsofs.maxele.png',     clim=[0.0, 3.0])
+    cf1 = plotSurfaceOnMap (grid, -1.0*grid['depth'], titleStr='Grid Depth', 
+                            figFile='hsofs.grid.depth.png', clim=[-50, 10],
+                            lonlim=[-75.8, -75], latlim=[35, 35.9])
+#    # Demo masked array:
+#    cf2 = plotSurfaceOnMap (grid, maxele['value'], titleStr='Peak Flood', 
+#                            figFile='hsofs.maxele.png',     clim=[0.0, 3.0])
     
     
