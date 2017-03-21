@@ -19,28 +19,40 @@ def plotScatter ():
     print '[error]: not yet implemented'
 
 #==============================================================================
-def plot2DFieldOnMap ( grid, field2D, 
+def plotSurfaceOnMap ( grid, surface, 
                       titleStr='', figFile='', clim=[0.0, 3.0]):
     """
     Plots a 2D field on top of a geographic map
     Args:
-        grid    (dict)        : grid  as read by   adcirc.readGrid ()
-        field2D (dict)        : field as read by adcirc.read2DField()
+        grid    (dict)   : grid     as read by adcirc.readGrid ()
+        surface (array or masked_array) : 
+                   2d field as read by adcirc.readSurfaceField ()
     Optional:
         titleStr  (str)       : plot title, (''=default)
-        figFile   (str)       : path for saving a figure (None=default)
+        figFile   (str)       : path for saving a figure (''=default)
         clim ([float, float]) : color limits, ([0.0, 3.0] = default)
-    Returns
+    Returns:
         fig (matplotlib figure handle) 
+    Uses:
+        grid = adcirc.readGrid ('fort.14')    
+        plotSurfaceOnMap (grid, grid['depth'],clim=[-100, 4000])
+   #             -- will plot bathymetry on the grid.            
+        maxele = adcirc.readSurfaceField ('maxele.nc', 'zeta_max' )
+        plotSurfaceOnMap (grid, maxele['value'],clim=[0.0, 3.0])
+   #             -- will plot maxele field on the grid.            
     """
     
     print '[info]: plotting ' + titleStr    
     lon       = grid['lon']
     lat       = grid['lat']
     triangles = grid['Elements']
-    z         = field2D['value']
+    z         = surface
     Tri       = tri.Triangulation(lon, lat, triangles=triangles-1)
     
+    if hasattr(z,'mask'): 
+        zmask = z.mask
+    else:
+        zmask = np.ones(len(z), dtype=bool)
     # Set mask 
     # TODO : Optimize this following loop
     #
@@ -49,12 +61,12 @@ def plot2DFieldOnMap ( grid, field2D,
     for t in Tri.triangles:
         count+=1
         ind = t
-        if np.any(z.mask[ind-1]):
+        if np.any(zmask[ind-1]):
             mask[count-1] = False    
     Tri.set_mask = mask
     
     fig = plt.figure(figsize=(9,9))    
-    fig.add_axes([0.1,0.1,0.8,0.8])
+    fig.add_axes([0.05,0.05,0.85,0.9])
     m = Basemap(llcrnrlon=min(lon), llcrnrlat=min(lat),
                 urcrnrlon=max(lon), urcrnrlat=max(lat), resolution='l')
     m.drawcoastlines()
@@ -73,10 +85,8 @@ def plot2DFieldOnMap ( grid, field2D,
     cs   = plt.tripcolor(Tri, z, shading='flat',\
                          edgecolors='none', \
                          vmin=clim[0], vmax=clim[1], cmap=myCmap)
-    
     cbar = m.colorbar(cs)
-    cbar.set_label('M MSL')
-    plt.tight_layout()
+    cbar.set_label('M MSL')    
     
     if len(figFile):
         try:
@@ -88,14 +98,15 @@ def plot2DFieldOnMap ( grid, field2D,
 #==============================================================================
 if __name__ == "__main__":
 
-    maxele = \
-    adcirc.read2DField ( \
-    'hsofs.al092008.2008091106.nhctrk.fields.maxele.nc', 'zeta_max' ) 
-
-    grid = \
-    adcirc.readGrid ('..\adcirc\fort.14')    
-
-    print '[info]: Files are read. Now plotting...'
-    cf = plot2DFieldOnMap (grid, maxele, \
-                           'hsofs.al092008.2008091106.nhctrk.fields.maxele')
+    grid   = adcirc.readGrid ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
+    maxele = adcirc.readSurfaceField ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/plotter/hsofs.al092008.2008091206.nhctrk.fields.maxele.nc', \
+                                      'zeta_max' ) 
+    
+    # Demo unmasked array:
+    cf1 = plotSurfaceOnMap (grid, grid['depth'], titleStr='Grid Depth', 
+                            figFile='hsofs.grid.depth.png', clim=[-100, 4000])
+    # Demo masked array:
+    cf2 = plotSurfaceOnMap (grid, maxele['value'], titleStr='Peak Flood', 
+                            figFile='hsofs.maxele.png',     clim=[0.0, 3.0])
+    
     
