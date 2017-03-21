@@ -4,6 +4,7 @@ Created on Thu Mar 16 10:02:14 2017
 
 @author: Sergey.Vinogradov
 """
+import os
 import numpy as np
 import netCDF4
 
@@ -20,6 +21,10 @@ def readGrid ( gridFile ):
     input-file-descriptions/adcirc-grid-and-boundary-information-file-fort-14/
     """
     print '[info]: Reading the grid from ' + gridFile + '.'
+    if not os.path.exists (gridFile):
+        print '[error]: File ' + gridFile + ' does not exist.'
+        return
+        
     f  = open(gridFile)
     
     myDesc     = f.readline().rstrip()
@@ -33,7 +38,9 @@ def readGrid ( gridFile ):
     print '[info]: Reading grid points...'
     for k in range(myNP):
         line            = f.readline().split()
-        myPoints[k,0:2] = map(float, line[1:3])
+        myPoints[k,0] = float(line[1])
+        myPoints[k,1] = float(line[2])
+        myPoints[k,2] = float(line[3])
 
     print '[info]: Reading grid elements...'
     for k in range(myNE):
@@ -125,7 +132,7 @@ def readGrid ( gridFile ):
             }
 
 #==============================================================================
-def read2DField ( ncFile, ncVar ):  
+def readSurfaceField ( ncFile, ncVar ):  
     """
     Reads specified variable from the ADCIRC 2D netCDF output
     and grid points along with validation time.
@@ -137,6 +144,10 @@ def read2DField ( ncFile, ncVar ):
     """
     
     print '[info]: reading [' + ncVar + '] from ' + ncFile
+    if not os.path.exists (ncFile):
+        print '[error]: File ' + ncFile + ' does not exist.'
+        return
+           
     nc   = netCDF4.Dataset (ncFile)
     lon  = nc.variables['x'][:]
     lat  = nc.variables['y'][:]
@@ -148,7 +159,7 @@ def read2DField ( ncFile, ncVar ):
             'path' : ncFile, 'variable' : ncVar}
 
 #==============================================================================
-def read2DField_ascii ( asciiFile ):
+def readSurfaceField_ascii ( asciiFile ):
     """
     Reads ADCIRC 2D output file (e.g. mmaxele)
     Args:
