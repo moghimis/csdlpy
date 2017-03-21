@@ -19,16 +19,26 @@ def plotScatter ():
     print '[error]: not yet implemented'
 
 #==============================================================================
-"""
-"""
-def plot2DFieldOnMap ( grid, maxele, titleStr='', saveFig=None, 
-                      clim=[0.0, 3.0]):
+def plot2DFieldOnMap ( grid, field2D, 
+                      titleStr='', figFile='', clim=[0.0, 3.0]):
+    """
+    Plots a 2D field on top of a geographic map
+    Args:
+        grid    (dict)        : grid  as read by   adcirc.readGrid ()
+        field2D (dict)        : field as read by adcirc.read2DField()
+    Optional:
+        titleStr  (str)       : plot title, (''=default)
+        figFile   (str)       : path for saving a figure (None=default)
+        clim ([float, float]) : color limits, ([0.0, 3.0] = default)
+    Returns
+        fig (matplotlib figure handle) 
+    """
     
     print '[info]: plotting ' + titleStr    
     lon       = grid['lon']
     lat       = grid['lat']
     triangles = grid['Elements']
-    z         = maxele['value']
+    z         = field2D['value']
     Tri       = tri.Triangulation(lon, lat, triangles=triangles-1)
     
     # Set mask 
@@ -66,9 +76,13 @@ def plot2DFieldOnMap ( grid, maxele, titleStr='', saveFig=None,
     
     cbar = m.colorbar(cs)
     cbar.set_label('M MSL')
+    plt.tight_layout()
     
-    if saveFig:
-        plt.savefig (saveFig)        
+    if len(figFile):
+        try:
+            plt.savefig (figFile)        
+        except:
+            print '[error]: cannot save figure into ' + figFile + '.'
     return fig
 
 #==============================================================================
@@ -76,13 +90,12 @@ if __name__ == "__main__":
 
     maxele = \
     adcirc.read2DField ( \
-    'F:/2008_Ike/NHC/hsofs.2008091106.fixed/hsofs.al092008.2008091106.nhctrk.fields.maxele.nc', \
-    'zeta_max' ) 
+    'hsofs.al092008.2008091106.nhctrk.fields.maxele.nc', 'zeta_max' ) 
 
     grid = \
-    adcirc.readGrid (\
-    'C:/Users/sergey.vinogradov/JET/stormsurge/mesh/CubaIkeModNOMAD1enoflux.grd')    
+    adcirc.readGrid ('..\adcirc\fort.14')    
 
     print '[info]: Files are read. Now plotting...'
-    cf = plot2DFieldOnMap (grid, maxele, 'hsofs.al092008.2008091106.nhctrk.fields.maxele')
+    cf = plot2DFieldOnMap (grid, maxele, \
+                           'hsofs.al092008.2008091106.nhctrk.fields.maxele')
     
