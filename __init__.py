@@ -4,4 +4,5 @@ import obs
 import atcf
 import transfer
 import plotter
-__all__ = ['adcirc', 'estofs', 'obs', 'atcf', 'transfer', 'plotter']
+import interp
+__all__ = ['adcirc', 'estofs', 'obs', 'atcf', 'transfer', 'plotter', 'interp']
