@@ -44,16 +44,12 @@ def interpCoastal (grid, data, isobathToTaper = 200.):
 #==============================================================================
 if __name__ == "__main__":  
     
-    #Grid
     grid   = adcirc.readGrid ('../adcirc/fort.14')    
-    # Data
-    data      = readLonLatVal ('xybias.csv')
+    data   = readLonLatVal ('xybias.csv')
     
     vi = interpCoastal(grid, copy.deepcopy(data))
 
     clim  =[-0.15,0.30]    
-#    lonlim=[-100, -65] 
-#    latlim=[ 20,  45]
     lonlim=[ grid['lon'].min(), grid['lon'].max()]
     latlim=[ grid['lat'].min(), grid['lat'].max()]
     
