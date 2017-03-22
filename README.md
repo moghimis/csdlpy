@@ -12,13 +12,13 @@ Dev Plan
 
 [++-] csdlpy / adcirc -- ADCIRC-specific low-level functionalities
 
-[+--] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
-
 [++-] csdlpy / atcf   -- ATCF-format parsers
 
-[+--] csdlpy / transfer -- ftp and email-based file transfer tools
+[++-] csdlpy / plotter -- all plotting routines
 
-[+--] csdlpy / plotter -- all plotting routines
+[+--] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
+
+[+--] csdlpy / transfer -- ftp and email-based file transfer tools
 
 [---] csdlpy / hsofs  -- HSOFS specific functionalities built upon csdlpy / adcirc
 
