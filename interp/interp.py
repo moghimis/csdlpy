@@ -45,11 +45,9 @@ def interpCoastal (grid, data, isobathToTaper = 200.):
 if __name__ == "__main__":  
     
     #Grid
-    grid   = adcirc.readGrid ( \
-            'C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
+    grid   = adcirc.readGrid ('../adcirc/fort.14')    
     # Data
-    data      = readLonLatVal ( \
-            'C:/Users/sergey.vinogradov/JET/matlab/bias_work/xybias_liang.csv')
+    data      = readLonLatVal ('xybias.csv')
     
     vi = interpCoastal(grid, copy.deepcopy(data))
 
