@@ -4,8 +4,6 @@ Created on Thu Mar 20 10:45:00 2017
 
 @author: Sergey.Vinogradov
 """
-import adcirc
-from obs.coops import readLonLatVal
 import numpy as np
 from scipy.interpolate import griddata
 import copy
@@ -44,7 +42,10 @@ def interpCoastal (grid, data, isobathToTaper = 200.):
 #==============================================================================
 if __name__ == "__main__":  
     
-    grid   = adcirc.readGrid ('../adcirc/fort.14')    
+    from adcirc import readGrid
+    from obs.coops import readLonLatVal
+    
+    grid   = readGrid      ('../adcirc/fort.14')        
     data   = readLonLatVal ('xybias.csv')
     
     vi = interpCoastal(grid, copy.deepcopy(data))
