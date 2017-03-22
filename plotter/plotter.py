@@ -19,8 +19,8 @@ def plotScatter ():
     print '[error]: not yet implemented'
 
 #==============================================================================
-def plotSurfaceOnMap ( grid, surface, 
-                      titleStr='', figFile='', 
+def plotSurfaceOnMap (grid, surface, 
+                      fig=None, titleStr='', figFile='', 
                       clim=[0.0, 3.0], lonlim=None, latlim=None,
                       bar_label='M MSL', mapResolution='c'):
     """
@@ -30,6 +30,7 @@ def plotSurfaceOnMap ( grid, surface,
         surface (array or masked_array) : 
                    2d field as read by adcirc.readSurfaceField ()
     Optional:
+        fig (plt.figure)       : figure handle
         titleStr  (str)        : plot title, (''=default)
         figFile   (str)        : path for saving a figure (''=default)
         clim ([float, float])  : color limits, ([0.0, 3.0] = default)
@@ -78,9 +79,9 @@ def plotSurfaceOnMap ( grid, surface,
     #Set resolution depending on longitudinal swath
     dparallels, dmeridians = 10., 10.    
     if mapResolution == 'c':
-        if dx <= 30.0:
+        if dx <= 50.0:
             mapResolution = 'l'
-            dparallels = dmeridians = 4.0
+            dparallels = dmeridians = 5.0
         if dx <= 15.0:
             mapResolution = 'i'
             dparallels = dmeridians = 2.0
@@ -92,7 +93,9 @@ def plotSurfaceOnMap ( grid, surface,
             dparallels = dmeridians = 0.1
         print '[info]: Resolution is set to ' + mapResolution
                
-    fig = plt.figure(figsize=(9,9))    
+    if fig is None:
+        fig = plt.figure(figsize=(9,9))    
+        
     fig.add_axes([0.05,0.05,0.85,0.9])
     m = Basemap(llcrnrlon=lonlim[0], llcrnrlat=latlim[0],
                 urcrnrlon=lonlim[1], urcrnrlat=latlim[1], 
@@ -123,20 +126,23 @@ def plotSurfaceOnMap ( grid, surface,
             plt.savefig (figFile)        
         except:
             print '[error]: cannot save figure into ' + figFile + '.'
-    return fig
+    
+    return {'fig' : fig, 'cmap' : myCmap}
 
 #==============================================================================
 if __name__ == "__main__":
 
-    grid   = adcirc.readGrid ('../adcirc/fort.14')    
-    maxele = adcirc.readSurfaceField ('maxele.nc', 'zeta_max' ) 
+    grid   = adcirc.readGrid ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
+    maxele = adcirc.readSurfaceField ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/plotter/hsofs.al092008.2008091206.nhctrk.fields.maxele.nc', \
+                                      'zeta_max' ) 
     
     # Demo unmasked array:
     cf1 = plotSurfaceOnMap (grid, -1.0*grid['depth'], titleStr='Grid Depth', 
-                            figFile='grid.depth.png', clim=[-50, 10],
+                            figFile='hsofs.grid.depth.png', clim=[-50, 10],
                             lonlim=[-75.8, -75], latlim=[35, 35.9])
-#    # Demo masked array:
-    cf2 = plotSurfaceOnMap (grid, maxele['value'], titleStr='Peak Flood', 
-                            figFile='maxele.png',     clim=[0.0, 3.0])
-    
+    # Demo masked array:
+    clim = [0.0, 3.0]
+    cf = plotSurfaceOnMap (grid, maxele['value'], titleStr='Peak Flood', 
+                            figFile='hsofs.maxele.png',     clim=clim,
+                            lonlim=[-74.5, -71.5], latlim=[39.9, 41.6])
     
