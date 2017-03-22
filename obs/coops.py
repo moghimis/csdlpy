@@ -169,6 +169,24 @@ def getStationInfo (stationID):
         return None
 
 #==============================================================================
+def readLonLatVal ( csvFile ):
+    """
+    Reads the list of lon, lat, values from the comma-delimited file
+    """
+    f = open( csvFile )
+    lines = f.readlines()
+    f.close()
+    lon = []
+    lat = []
+    val = []
+    for line in lines:
+        a = map(float,line.strip('\n').split(','))
+        lon.append( a[0] )
+        lat.append( a[1] )
+        val.append( a[2] )
+    return [lon, lat, val]    
+
+#==============================================================================
 if __name__ == "__main__":
 
     ## Demo the methods by downloading and plotting products at a station
