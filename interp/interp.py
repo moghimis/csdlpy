@@ -49,12 +49,12 @@ def shepard_idw(x, y, v, xi, yi, p=2):
     return vi
 
 #==============================================================================
-def decay_linear (z_full, z_zero, zg, vg):
+def taper_linear (z_full, z_zero, zg, vg):
     """
     Tapers the values of the field to zero in between the two specified depths
     Args:
         z_full (float) : depth at which the tapering starts 
-        z_zero (float) : depth at which the field fully tapered to zero
+        z_zero (float) : depth at which the field fully tapers to zero
         zg     (float) : array of depths (larger numbers are deeper)
         vg     (float) : array of values to taper        
     Returns:
@@ -67,6 +67,29 @@ def decay_linear (z_full, z_zero, zg, vg):
         w = (zg[n]-z_zero)/(z_full-z_zero)
         vg[n] = w*vg[n]
     return vg
+
+#==============================================================================
+def taper_exp (z_full, z_zero, zg, vg):
+    """
+    Tapers the values of the field to zero in between the two specified depths
+    Args:
+        z_full (float) : depth at which the tapering starts 
+        z_zero (float) : depth at which the field fully tapers to zero
+        zg     (float) : array of depths (larger numbers are deeper)
+        vg     (float) : array of values to taper        
+    Returns:
+        vg     (float) : tapered array
+    """
+    print '[info]: Computing exponential decay...'
+    
+    #TODO: Optimize
+    for n in range(len(vg)):
+        #w = (zg[n]-z_zero)/(z_full-z_zero)
+        if zg[n]>z_full:
+            w     = z_zero/(z_zero-z_full)*(z_full/zg[n]-1.0) + 1.0
+            vg[n] = w*vg[n]
+    return vg
+
 #==============================================================================
 
 if __name__ == "__main__":  
@@ -88,17 +111,25 @@ if __name__ == "__main__":
     y = data[1][:]
     v = data[2][:]
     
-    z_full  = 50.
-    z_zero  = 200.
-    
+    z_full  = 0.   # Depth at which we have full interpolated values
+    z_zero  = 200. # Depth at which we have interpolated values tapered to 0. 
     p = 2.0
+    
+    print '[info]: Interpolate on the shelf...'
     ind_shelf     = np.where(zg < z_zero)[0]
-    vg[ind_shelf] = shepard_idw (x, y, v, xg[ind_shelf], yg[ind_shelf], p=2)
-       
+    vg[ind_shelf] = shepard_idw (x, y, v, xg[ind_shelf], yg[ind_shelf], p)
 
-    print '[info]: z-decay...'
-    ind_decay     = np.where(np.logical_and(z_full <= zg, zg <= z_zero))[0]
-    vg[ind_decay] = decay_linear (z_full, z_zero, zg[ind_decay], vg[ind_decay])
+    print '[info]: Taper by depth...'
+    ind_taper     = np.where (np.logical_and(z_full <= zg, zg <= z_zero))[0]
+    vg[ind_taper] = taper_linear (z_full, z_zero, zg[ind_taper], vg[ind_taper])
+    #vg[ind_taper] = taper_exp (z_full, z_zero, zg[ind_taper], vg[ind_taper])
+    
+    print'[info]: zero out the results that are too distant from data'
+    R = 1.5
+    dist = distance_matrix(x, y, xg, yg)
+    for n in range(len(xg)):
+        if np.min(dist[:,n]) > R:
+            vg[n] = 0.
     
     clim  =[-0.15,0.30]    
     lonlim=[-87, -78] 
@@ -112,12 +143,12 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import plotter    
    
-    F1 = plotter.plotMap (fig=None, lonlim=lonlim, latlim=latlim)
-    F1 = plotter.plotSurface(grid, vg, fig = F1['fig'], 
+    F = plotter.plotMap (fig=None, lonlim=lonlim, latlim=latlim)
+    F = plotter.plotSurface(grid, vg, fig = F['fig'], 
                                  clim=clim, lonlim=lonlim, latlim=latlim)
-    F1 = plotter.plotTriangles (data, threshold=0.0, cmap=F1['cmap'],
-                   fig=F1['fig'], clim=clim)
+    F = plotter.plotTriangles (data, threshold=0.0, cmap=F['cmap'],
+                   fig=F['fig'], clim=clim)
     plt.colorbar()
     plt.title('IDW Shepards p=' + str(p) + 
-                  ' with z-decay from '+str(z_full)+ ' to ' + str(z_zero))
+                  ' with z-decay from '+str(z_full)+ ' to ' + str(z_zero) + ', R=' + str(R))
 
