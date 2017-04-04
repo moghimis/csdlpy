@@ -1,0 +1,44 @@
+Function headers with required args only
+
+csdlpy
+
+csdlpy.adcirc
+csdlpy.adcirc.readGrid                ( gridFile )
+csdlpy.adcirc.readSurfaceField   ( ncFile, ncVar )
+csdlpy.adcirc.readSurfaceField_ascii ( asciiFile )
+csdlpy.adcirc.readControlFile      ( controlFile )
+csdlpy.adcirc.readFort13            ( fort13file )
+csdlpy.adcirc.readFort14            ( fort14file )
+csdlpy.adcirc.readFort15            ( fort15file )
+
+csdlpy.atcf
+csdlpy.atcf.readTrack (atcfFile )
+
+csdlpy.interp
+csdlpy.interp.distance_matrix     (x0, y0, x1, y1 )
+csdlpy.interp.shepard_idw    (x, y, v, xi, yi, p=2)
+csdlpy.interp.taper_linear (z_full, z_zero, zg, vg)
+csdlpy.interp.taper_exp    (z_full, z_zero, zg, vg)
+
+csdlpy.obs
+csdlpy.obs.coops.getdata ( stationID,   dateRange )
+csdlpy.obs.coops.getStationInfo       ( stationID )
+csdlpy.obs.coops.readLonLatVal          ( csvFile )
+csdlpy.obs.ndbc.getdata  ( stationID,   dateRange )
+csdlpy.obs.ndbc.getStationInfo        ( stationID )
+
+csdlpy.plotter
+csdlpy.plotter.plotTimeSeries           (  )
+csdlpy.plotter.plotScatter              (  )
+csdlpy.plotter.plotMap                  (  )
+csdlpy.plotter.plotPoints           ( data )
+csdlpy.plotter.plotTriangles        ( data )
+csdlpy.plotter.plotsurface ( grid, surface )
+
+csdlpy.transfer
+csdlpy.transfer.email.compressFiles  (  )
+csdlpy.transfer.email.sendPlainEmail (  )
+csdlpy.transfer.email.sendAttachment (  )
+csdlpy.transfer.ftp.ftpPut           (  )
+
+
