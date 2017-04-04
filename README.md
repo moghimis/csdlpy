@@ -16,6 +16,8 @@ Dev Plan
 
 [++-] csdlpy / plotter -- all plotting routines
 
+[++-] csdlpy / interp -- interpolation tools, initially for bias correction 
+
 [+--] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
 
 [+--] csdlpy / transfer -- ftp and email-based file transfer tools
