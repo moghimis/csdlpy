@@ -20,7 +20,7 @@ def plotScatter ():
 
 #==============================================================================
 def plotMap (fig=None, lonlim=[-98.0, -53.8], latlim=[5.8, 46.0],
-                      mapResolution='c'):
+                      mapResolution='c', figsize=[9,9]):
     """
     Plots a geographic map
     Args:
@@ -54,7 +54,7 @@ def plotMap (fig=None, lonlim=[-98.0, -53.8], latlim=[5.8, 46.0],
         print '[info]: Resolution is set to ' + mapResolution
                
     if fig is None:
-        fig = plt.figure(figsize=(9,9))    
+        fig = plt.figure(figsize=figsize)    
         
     fig.add_axes([0.05,0.05,0.85,0.9])
     m = Basemap(llcrnrlon=lonlim[0], llcrnrlat=latlim[0],
@@ -197,8 +197,8 @@ def plotSurface (grid, surface,
 #==============================================================================
 if __name__ == "__main__":
 
-    grid   = adcirc.readGrid ('../adcirc/fort.14')    
-    maxele = adcirc.readSurfaceField ('./hsofs.al092008.2008091206.nhctrk.fields.maxele.nc', \
+    grid   = adcirc.readGrid ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
+    maxele = adcirc.readSurfaceField ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/plotter/hsofs.al092008.2008091206.nhctrk.fields.maxele.nc', \
                                       'zeta_max' ) 
     
 #    # Demo unmasked array:
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     from obs.coops import readLonLatVal
 
     data   = readLonLatVal ( \
-            '/xybias.csv')
+            'C:/Users/sergey.vinogradov/JET/matlab/bias_work/xybias_liang.csv')
     cf2 = plotTriangles (data, threshold=0.0,
                    fig=cf2['fig'],  
                    clim=[-0.5, 0.5], lonlim=lonlim, latlim=latlim)
