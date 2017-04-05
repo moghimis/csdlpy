@@ -24,7 +24,7 @@ def distance_matrix(x0, y0, x1, y1):
 #==============================================================================
 def shepard_idw(x, y, v, xi, yi, p=2):
     """
-    Computes Shepard's invese distance weighted interpolation
+    Computes Shepard's inverse distance weighted interpolation
     Args:
         x, y, v (float) : arrays for data coordinates and values
         xi,  yi (float) : arrays for grid coordinates
