@@ -40,7 +40,13 @@ def read_bias_file (csvFile):
     
 #==============================================================================
 if __name__ == "__main__":
-
+    """
+    Script to run daily on devprod machine, after the latest bias list
+    is available.
+    Script reads the latest biases, plots them up on the map, 
+    saves the map, interpolates biases onto the grid, plots the result
+    and saves the file for ADCIRC pseudo
+    """
     #0. Configure paths
     ## WCOSS: 
     # csv_path = "/gpfs/hps/nos/save/Sergey.Vinogradov/bias_daily/"
