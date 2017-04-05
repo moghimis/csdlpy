@@ -11,6 +11,11 @@ csdlpy.adcirc.readFort13            ( fort13file )
 csdlpy.adcirc.readFort14            ( fort14file )
 csdlpy.adcirc.readFort15            ( fort15file )
 
+csdlpy.apps
+csdlpy.bias_surface                           (  )
+csdlpy.bias_surface.read_bias_file     ( csvFile )
+
+
 csdlpy.atcf
 csdlpy.atcf.readTrack (atcfFile )
 
