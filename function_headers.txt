@@ -10,6 +10,7 @@ csdlpy.adcirc.readControlFile      ( controlFile )
 csdlpy.adcirc.readFort13            ( fort13file )
 csdlpy.adcirc.readFort14            ( fort14file )
 csdlpy.adcirc.readFort15            ( fort15file )
+csdlpy.adcirc.writeOffset63 ( offset, offsetFile )
 
 csdlpy.apps
 csdlpy.bias_surface                           (  )
