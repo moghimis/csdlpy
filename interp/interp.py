@@ -98,7 +98,7 @@ if __name__ == "__main__":
     from obs.coops import readLonLatVal
     #Grid
     grid   = readGrid ( \
-            'C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
+            '../adcirc/fort.14')    
     xg = grid['lon']
     yg = grid['lat']
     zg = grid['depth']
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     
     # Data
     data   = readLonLatVal ( \
-            'C:/Users/sergey.vinogradov/JET/matlab/bias_work/xybias_liang.csv')
+            './xybias.csv')
     x = data[0][:]
     y = data[1][:]
     v = data[2][:]
