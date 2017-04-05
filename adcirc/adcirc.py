@@ -112,23 +112,23 @@ def readGrid ( gridFile ):
     return {'GridDescription'               : myDesc, 
             'NE'                            : myNE, 
             'NP'                            : myNP, 
-            'lon'                           : myPoints[:,0],
-            'lat'                           : myPoints[:,1], 
-            'depth'                         : myPoints[:,2], 
-            'Elements'                      : myElements,
+            'lon'                           : np.squeeze(myPoints[:,0]),
+            'lat'                           : np.squeeze(myPoints[:,1]), 
+            'depth'                         : np.squeeze(myPoints[:,2]), 
+            'Elements'                      : np.squeeze(myElements),
             'NETA'                          : myNETA, 
             'NOPE'                          : myNOPE,
-            'ElevationBoundaries'           : myNBDV, 
-            'NormalFlowBoundaries'          : myNBVV,
-            'ExternalBarrierHeights'        : myBARLANHT,
-            'ExternalBarrierCFSPs'          : myBARLANCFSP,
-            'BackFaceNodeNormalFlow'        : myIBCONN,
-            'InternalBarrierHeights'        : myBARINHT,
-            'InternallBarrierCFSPs'         : myBARINCFSP,
-            'InternallBarrierCFSBs'         : myBARINCFSB,            
-            'CrossBarrierPipeHeights'       : myPIPEHT,
-            'BulkPipeFrictionFactors'       : myPIPECOEF,            
-            'CrossBarrierPipeDiameter'      : myPIPEDIAM
+            'ElevationBoundaries'           : np.squeeze(myNBDV), 
+            'NormalFlowBoundaries'          : np.squeeze(myNBVV),
+            'ExternalBarrierHeights'        : np.squeeze(myBARLANHT),
+            'ExternalBarrierCFSPs'          : np.squeeze(myBARLANCFSP),
+            'BackFaceNodeNormalFlow'        : np.squeeze(myIBCONN),
+            'InternalBarrierHeights'        : np.squeeze(myBARINHT),
+            'InternallBarrierCFSPs'         : np.squeeze(myBARINCFSP),
+            'InternallBarrierCFSBs'         : np.squeeze(myBARINCFSB),            
+            'CrossBarrierPipeHeights'       : np.squeeze(myPIPEHT),
+            'BulkPipeFrictionFactors'       : np.squeeze(myPIPECOEF),            
+            'CrossBarrierPipeDiameter'      : np.squeeze(myPIPEDIAM)
             }
 
 #==============================================================================
@@ -143,7 +143,7 @@ def readSurfaceField ( ncFile, ncVar ):
         dict: 'lon', 'lat', 'time', 'value', 'path', 'variable'
     """
     
-    print '[info]: reading [' + ncVar + '] from ' + ncFile
+    print '[info]: Reading [' + ncVar + '] from ' + ncFile
     if not os.path.exists (ncFile):
         print '[error]: File ' + ncFile + ' does not exist.'
         return
@@ -222,6 +222,27 @@ def readFort15 ( fort15file ):
     Reads ADCIRC fort.15 file
     """
     return readControlFile (fort15file)
+
+#==============================================================================
+def writeOffset63 ( val, offset63file ):
+    """
+    Writes ADCIRC offset.63 file in ASCII format
+    for use with pseudo pressure loading option
+    Args:
+        val (float)        : Array of gridded values 
+        offset63file (str) : Full path to the output file
+    Note:
+        val should be the same size and order as your grid arrays
+    """
+    print '[info]: writing Offset63 file...'
+    f = open(offset63file,'w')
+    f.write("# ADCIRC Offset file\n")
+    f.write("0.0\n")
+    f.write("0.0\n")    
+    for n in range(len(val)):
+        f.write(str(n+1) + ' ' + str(val[n]) + '\n')
+    f.close()
+    return None
 
 #==============================================================================
 if __name__ == "__main__":
