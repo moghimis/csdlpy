@@ -4,6 +4,8 @@ Created on Wed Apr 05 11:29:21 2017
 
 @author: Sergey.Vinogradov
 """
+import sys
+sys.path.insert(0,'/u/Sergey.Vinogradov/nos_noscrub/csdlpy')
 import os
 from datetime import datetime as dt
 import csv
@@ -49,15 +51,15 @@ if __name__ == "__main__":
     """
     #0. Configure paths
     ## WCOSS: 
-    # csv_path = "/gpfs/hps/nos/save/Sergey.Vinogradov/bias_daily/"
-    # pix_path = "/gpfs/hps/nos/save/Sergey.Vinogradov/bias_daily/pix/"
-    # grd_file = "/gpfs/hps/nos/save/Sergey.Vinogradov/hsofs/fort.14"
-    # ofstFile = "/gpfs/hps/nos/save/Sergey.Vinogradov/bias_daily/pix/offset.63"
+    csv_path = "/gpfs/hps/nos/save/Sergey.Vinogradov/com/"
+    pix_path = "/gpfs/hps/nos/save/Sergey.Vinogradov/pix/"
+    grd_file = "/gpfs/hps/nos/noscrub/Sergey.Vinogradov/csdlpy/adcirc/fort.14"
+    ofstFile = "/gpfs/hps/nos/save/Sergey.Vinogradov/com/offset.63"
     ## Local test
-    csv_path = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/apps/"
-    pix_path = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/apps/pix/"
-    grd_file = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14"
-    ofstFile = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/apps/offset.63"
+    #csv_path = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/apps/"
+    #pix_path = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/apps/pix/"
+    #grd_file = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14"
+    #ofstFile = "C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/apps/offset.63"
     
     # Configure parameters    
     z_full  = 0.   # Depth at which we have full interpolated values
@@ -73,7 +75,8 @@ if __name__ == "__main__":
     dd   = str(now.day).zfill(2)    
     print '[time]: ', now     
     #2. Read latest bias
-    csvFile = csv_path + yyyy+mm+dd+'.csv'   
+    #csvFile = csv_path + yyyy+mm+dd+'.csv'
+    csvFile = csv_path + 'today_bias.csv'   
     if os.path.exists(csvFile):
         data = read_bias_file (csvFile)
     else:
