@@ -2,44 +2,65 @@ Function headers with required args only
 
 csdlpy
 
-csdlpy.adcirc
-csdlpy.adcirc.readGrid                ( gridFile )
-csdlpy.adcirc.readSurfaceField   ( ncFile, ncVar )
-csdlpy.adcirc.readSurfaceField_ascii ( asciiFile )
-csdlpy.adcirc.readControlFile      ( controlFile )
-csdlpy.adcirc.readFort13            ( fort13file )
-csdlpy.adcirc.readFort14            ( fort14file )
-csdlpy.adcirc.readFort15            ( fort15file )
-csdlpy.adcirc.writeOffset63 ( offset, offsetFile )
+csdlpy/adcirc:
+readGrid                ( gridFile )
+readSurfaceField   ( ncFile, ncVar )
+readSurfaceField_ascii ( asciiFile )
+readControlFile      ( controlFile )
+readFort13            ( fort13file )
+readFort14            ( fort14file )
+readFort15            ( fort15file )
+writeOffset63 ( offset, offsetFile )
 
-csdlpy.apps
-csdlpy.bias_surface                           (  )
-csdlpy.bias_surface.read_bias_file     ( csvFile )
+csdlpy/apps:
+bias_surface                     (  )
+bias_surface.read_bias_file (csvFile)
+bias_table                       (  )
+estofs_stations                  (  )
 
+csdlpy/atcf:
+readTrack ( atcfFile )
 
-csdlpy.atcf
-csdlpy.atcf.readTrack (atcfFile )
+csdlpy/csdldata
+csdldata.set_data_path (  )
 
-csdlpy.interp
-csdlpy.interp.distance_matrix     (x0, y0, x1, y1 )
-csdlpy.interp.shepard_idw    (x, y, v, xi, yi, p=2)
-csdlpy.interp.taper_linear (z_full, z_zero, zg, vg)
-csdlpy.interp.taper_exp    (z_full, z_zero, zg, vg)
+csdlpy/estofs
+getPointsWaterlevel  (ncFile)
 
-csdlpy.obs
-csdlpy.obs.coops.getdata ( stationID,   dateRange )
-csdlpy.obs.coops.getStationInfo       ( stationID )
-csdlpy.obs.coops.readLonLatVal          ( csvFile )
-csdlpy.obs.ndbc.getdata  ( stationID,   dateRange )
-csdlpy.obs.ndbc.getStationInfo        ( stationID )
+csdlpy/interp
+distance_matrix     (x0, y0, x1, y1 )
+shepard_idw    (x, y, v, xi, yi, p=2)
+taper_linear (z_full, z_zero, zg, vg)
+taper_exp    (z_full, z_zero, zg, vg)
 
-csdlpy.plotter
-csdlpy.plotter.plotTimeSeries           (  )
-csdlpy.plotter.plotScatter              (  )
-csdlpy.plotter.plotMap                  (  )
-csdlpy.plotter.plotPoints           ( data )
-csdlpy.plotter.plotTriangles        ( data )
-csdlpy.plotter.plotsurface ( grid, surface )
+csdlpy/obs
+coops
+coops.getdata ( stationID,   dateRange )
+coops.getStationInfo       ( stationID )
+coops.readLonLatVal          ( csvFile ) <-- MOVE to obs?
+
+shef.parse_shef     ( time_list )
+shef.load_id_lookup_table     ( )
+shef.load_meter_mllw_to_msl   ( )
+shef.load_feet_mllw_to_navd88 ( )
+shef.time_list                ( )
+shef.QC                  ( shef )
+shef.generate_bias_list  ( shef )
+shef.calc_stat_sig       ( data )
+shef.bias_meter_msl      ( shef )
+shef.bias_meter_mllw     ( shef )
+shef.bias_feet_navd88    ( shef )
+shef.write_bias_file ( shef, csvFile )
+shef.read_shef                ( )
+shef.bias_table         ( fileToSave )
+
+csdlpy/plotter
+plotTimeSeries           (  )
+plotScatter              (  )
+plotMap                  ([])
+plotPoints           ( data )
+plotTriangles        ( data )
+plotsurface ( grid, surface )
 
 csdlpy.transfer
 csdlpy.transfer.email.compressFiles  (  )
