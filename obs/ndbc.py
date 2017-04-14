@@ -37,7 +37,7 @@ def getdata (stationID,  dateRange,
         now   = datetime.now()
         dates = (now-dt(days=3), now)
         sigWaveHeight = getdata('44091', dates)
-        retrieves significant wave height at Barnegat, NY over the last 3 days.
+        retrieves significant wave height at Barnegat, NJ over the last 3 days.
         
     """
     ## Check dateRanges for server limits, slit if necessary

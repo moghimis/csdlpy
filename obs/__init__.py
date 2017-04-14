@@ -1,2 +1,2 @@
 from obs import *
-__all__ = ['coops', 'ndbc']
+__all__ = ['coops', 'shef', 'ndbc']
