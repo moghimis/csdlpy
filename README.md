@@ -20,7 +20,7 @@ Dev Plan
 
 [++-] csdlpy / apps -- applications to deploy operationally
 
-[+--] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
+[++-] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
 
 [+--] csdlpy / transfer -- ftp and email-based file transfer tools
 
