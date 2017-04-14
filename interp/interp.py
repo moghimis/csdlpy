@@ -12,7 +12,7 @@ def distance_matrix(x0, y0, x1, y1):
     Computes euclidean distance matrix, fast
     from <http://stackoverflow.com/questions/1871536>
     """    
-    print '[info]: computing distance matrix...'
+    print '[info]: Computing distance matrix...'
     obs    = np.vstack((x0, y0)).T
     interp = np.vstack((x1, y1)).T
 
@@ -24,7 +24,7 @@ def distance_matrix(x0, y0, x1, y1):
 #==============================================================================
 def shepard_idw(x, y, v, xi, yi, p=2):
     """
-    Computes Shepard's inverse distance weighted interpolation
+    Computes Shepard's invese distance weighted interpolation
     Args:
         x, y, v (float) : arrays for data coordinates and values
         xi,  yi (float) : arrays for grid coordinates
@@ -34,7 +34,7 @@ def shepard_idw(x, y, v, xi, yi, p=2):
     """       
     dist = distance_matrix(x, y, xi, yi)    
 
-    print '[info]: computing IDW...'
+    print '[info]: Computing IDW...'
     vi = np.zeros(len(xi), dtype=float)
     weights = 1.0/np.power(dist, p)
     
@@ -60,7 +60,7 @@ def taper_linear (z_full, z_zero, zg, vg):
     Returns:
         vg     (float) : tapered array
     """
-    print '[info]: computing linear decay...'
+    print '[info]: Computing linear taper...'
     
     #TODO: Optimize
     for n in range(len(vg)):
@@ -80,7 +80,7 @@ def taper_exp (z_full, z_zero, zg, vg):
     Returns:
         vg     (float) : tapered array
     """
-    print '[info]: Computing exponential decay...'
+    print '[info]: Computing exponential taper...'
     
     #TODO: Optimize
     for n in range(len(vg)):
@@ -96,17 +96,21 @@ if __name__ == "__main__":
     
     from adcirc import readGrid
     from obs.coops import readLonLatVal
+    from datetime import datetime as dt
+    
+    print '[time]: ', dt.now()
     #Grid
     grid   = readGrid ( \
-            '../adcirc/fort.14')    
+            'C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
     xg = grid['lon']
     yg = grid['lat']
     zg = grid['depth']
     vg = np.zeros(len(xg), dtype=float)
     
     # Data
+    print '[time]: ', dt.now()
     data   = readLonLatVal ( \
-            './xybias.csv')
+            'C:/Users/sergey.vinogradov/JET/matlab/bias_work/xybias_liang.csv')
     x = data[0][:]
     y = data[1][:]
     v = data[2][:]
@@ -114,18 +118,20 @@ if __name__ == "__main__":
     z_full  = 0.   # Depth at which we have full interpolated values
     z_zero  = 200. # Depth at which we have interpolated values tapered to 0. 
     p = 2.0
-    
+    print '[time]: ', dt.now()
     print '[info]: Interpolate on the shelf...'
     ind_shelf     = np.where(zg < z_zero)[0]
     vg[ind_shelf] = shepard_idw (x, y, v, xg[ind_shelf], yg[ind_shelf], p)
 
+    print '[time]: ', dt.now()
     print '[info]: Taper by depth...'
     ind_taper     = np.where (np.logical_and(z_full <= zg, zg <= z_zero))[0]
     vg[ind_taper] = taper_linear (z_full, z_zero, zg[ind_taper], vg[ind_taper])
     #vg[ind_taper] = taper_exp (z_full, z_zero, zg[ind_taper], vg[ind_taper])
     
-    print'[info]: zero out the results that are too distant from data'
-    R = 1.5
+    print '[time]: ', dt.now()
+    print '[info]: zero out the results that are too distant from data'
+    R = 2.0
     dist = distance_matrix(x, y, xg, yg)
     for n in range(len(xg)):
         if np.min(dist[:,n]) > R:
@@ -134,20 +140,24 @@ if __name__ == "__main__":
     clim  =[-0.15,0.30]    
     lonlim=[-87, -78] 
     latlim=[ 23,  33]
-    lonlim=[np.min(xg), np.max(xg)]
-    latlim=[np.min(yg), np.max(yg)]
+#    lonlim=[np.min(xg), np.max(xg)]
+#    latlim=[np.min(yg), np.max(yg)]
     
 #    
+    print '[time]: ', dt.now()
     print '[info]: Plotting...'
     # Plot the result    
     import matplotlib.pyplot as plt
     import plotter    
    
     F = plotter.plotMap (fig=None, lonlim=lonlim, latlim=latlim)
+    print '[time]: ', dt.now()
     F = plotter.plotSurface(grid, vg, fig = F['fig'], 
                                  clim=clim, lonlim=lonlim, latlim=latlim)
+    print '[time]: ', dt.now()
     F = plotter.plotTriangles (data, threshold=0.0, cmap=F['cmap'],
                    fig=F['fig'], clim=clim)
+    print '[time]: ', dt.now()
     plt.colorbar()
     plt.title('IDW Shepards p=' + str(p) + 
                   ' with z-decay from '+str(z_full)+ ' to ' + str(z_zero) + ', R=' + str(R))
