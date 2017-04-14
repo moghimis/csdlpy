@@ -16,10 +16,7 @@ import numpy as np
 import csv
 import os,sys
 import csdldata
-#------------------------------------------------------------------------------
-def set_data_path():
-    return "/gpfs/hps/nos/noscrub/Sergey.Vinogradov/csdlpy/csdldata/"
- 
+
 #------------------------------------------------------------------------------
 def parse_shef(time_list):
     dicts= defaultdict(lambda: defaultdict(list))
