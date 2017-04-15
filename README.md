@@ -6,35 +6,35 @@ No warranty of suitability is implied. Use on your own risk.
 
 Dev Plan
 
-[123] [1] - templates written, [2] - some functionality, [3] - full functionality
+[12] [1] - templates written, [2] - some functionality
 
-[++-] csdlpy / obs -- tools for working with CO-OPS and NDBC data
+[++] csdlpy / obs -- tools for working with CO-OPS and NDBC data
 
-[++-] csdlpy / adcirc -- ADCIRC-specific low-level functionalities
+[++] csdlpy / adcirc -- ADCIRC-specific low-level functionalities
 
-[++-] csdlpy / atcf   -- ATCF-format parsers
+[++] csdlpy / atcf   -- ATCF-format parsers
 
-[++-] csdlpy / plotter -- all plotting routines
+[++] csdlpy / plotter -- all plotting routines
 
-[++-] csdlpy / interp -- interpolation tools, initially for bias correction 
+[++] csdlpy / interp -- interpolation tools, initially for bias correction 
 
-[++-] csdlpy / apps -- applications to deploy operationally
+[++] csdlpy / apps -- applications to deploy operationally
 
-[++-] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
+[++] csdlpy / estofs -- ESTOFS-specific functionalities built upon csdlpy / adcirc
 
-[+--] csdlpy / transfer -- ftp and email-based file transfer tools
+[+-] csdlpy / transfer -- ftp and email-based file transfer tools
 
-[---] csdlpy / hsofs  -- HSOFS specific functionalities built upon csdlpy / adcirc
+[--] csdlpy / hsofs  -- HSOFS specific functionalities built upon csdlpy / adcirc
 
-[---] csdlpy / slosh  -- SLOSH-specific low-level functionalities
+[--] csdlpy / slosh  -- SLOSH-specific low-level functionalities
 
-[---] csdlpy / etss   -- ETSS-specific functionalities built upon csdlpy / slosh 
+[--] csdlpy / etss   -- ETSS-specific functionalities built upon csdlpy / slosh 
 
-[---] csdlpy / gfs   -- tools for working with GFS output
+[--] csdlpy / gfs   -- tools for working with GFS output
 
-[---] csdlpy / ecom   -- ECOM-specific low-level functionalities
+[--] csdlpy / ecom   -- ECOM-specific low-level functionalities
 
-[---] csdlpy / roms   -- ROMS-specific low-level functionalities
+[--] csdlpy / roms   -- ROMS-specific low-level functionalities
 
-[---] csdlpy / eval   -- skill assessment low-level functionalities
+[--] csdlpy / eval   -- skill assessment low-level functionalities
 
