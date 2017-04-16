@@ -42,13 +42,13 @@ def latestForecast (now = datetime.utcnow()):
         #take previous days t18z
         fxDate = now-timedelta(days=1)
         tHHz         = 't18z'
-    if t00z <= now and now < t06z:
+    elif t00z <= now and now < t06z:
         tHHz         = 't00z'
-    if t06z <= now and now < t12z:
+    elif t06z <= now and now < t12z:
         tHHz         = 't06z'
-    if t12z <= now and now < t18z:
+    elif t12z <= now and now < t18z:
         tHHz         = 't12z'
-    if t18z <= now:
+    elif t18z <= now:
         tHHz         = 't18z'
 
     yyyymmdd = str(fxDate.year).zfill(4)+ \
