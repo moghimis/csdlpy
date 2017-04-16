@@ -26,6 +26,7 @@ csdldata.set_data_path (  )
 
 csdlpy/estofs
 getPointsWaterlevel  (ncFile)
+latestForecast          (now)
 
 csdlpy/interp
 distance_matrix     (x0, y0, x1, y1 )
