@@ -16,6 +16,48 @@ import netCDF4
 from datetime import datetime
 from datetime import timedelta
 import numpy as np
+
+#==============================================================================
+def latestForecast (now = datetime.utcnow()):
+    """
+    Returns strings YYYYMMDD and tHHz, where HH=00,06,12,18 for the forecast
+    that should already have been produced on WCOSS at the time 'now'
+    Default value for 'now' is current UTC time.
+    """
+
+    #now = datetime.utcnow()
+    print '[info]: UTC now:', now
+    yyyy = str(now.year).zfill(4)
+    mm   = str(now.month).zfill(2)
+    dd   = str(now.day).zfill(2)
+
+    #production schedule (Based on ESTOFS v2 which is ~15 min later than v1)
+    t00z = datetime.strptime(yyyy+mm+dd+' 05:20','%Y%m%d %H:%M')
+    t06z = datetime.strptime(yyyy+mm+dd+' 11:20','%Y%m%d %H:%M')
+    t12z = datetime.strptime(yyyy+mm+dd+' 17:20','%Y%m%d %H:%M')
+    t18z = datetime.strptime(yyyy+mm+dd+' 23:20','%Y%m%d %H:%M')
+
+    fxDate = now
+    if now < t00z:
+        #take previous days t18z
+        fxDate = now-timedelta(days=1)
+        tHHz         = 't18z'
+    if t00z <= now and now < t06z:
+        tHHz         = 't00z'
+    if t06z <= now and now < t12z:
+        tHHz         = 't06z'
+    if t12z <= now and now < t18z:
+        tHHz         = 't12z'
+    if t18z <= now:
+        tHHz         = 't18z'
+
+    yyyymmdd = str(fxDate.year).zfill(4)+ \
+               str(fxDate.month).zfill(2)+ \
+               str(fxDate.day).zfill(2)
+
+    return {'yyyymmdd' : yyyymmdd,
+            'tHHz'     : tHHz} 
+
 #==============================================================================
 def getPointsWaterlevel ( ncFile ):    
     """
