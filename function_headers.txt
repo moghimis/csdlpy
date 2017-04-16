@@ -63,10 +63,4 @@ plotPoints           ( data )
 plotTriangles        ( data )
 plotsurface ( grid, surface )
 
-csdlpy.transfer
-csdlpy.transfer.email.compressFiles  (  )
-csdlpy.transfer.email.sendPlainEmail (  )
-csdlpy.transfer.email.sendAttachment (  )
-csdlpy.transfer.ftp.ftpPut           (  )
-
 
