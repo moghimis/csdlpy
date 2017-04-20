@@ -95,7 +95,7 @@ if __name__ == "__main__":
     obsVals  = np.zeros(len(obsDates))
     for i in range(len(obsVals)):
         obsVals[i] = np.cos(i)
-        obsVals[34] = np.nan
+    obsVals[34] = np.nan
    
     # Create model time series
     modStart = datetime(2017,04,19,6,11,30)
