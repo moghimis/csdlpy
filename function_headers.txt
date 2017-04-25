@@ -28,6 +28,9 @@ csdlpy/estofs
 getPointsWaterlevel  (ncFile)
 latestForecast          (now)
 
+csdlpy/deploy
+setPaths ()
+
 csdlpy/interp
 distance_matrix     (x0, y0, x1, y1 )
 shepard_idw    (x, y, v, xi, yi, p=2)
