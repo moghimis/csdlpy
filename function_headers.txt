@@ -29,7 +29,9 @@ getPointsWaterlevel  (ncFile)
 latestForecast          (now)
 
 csdlpy/deploy
-setPaths ()
+setPaths      ()
+setLocalPaths ()
+setOperPaths  ()
 
 csdlpy/interp
 distance_matrix     (x0, y0, x1, y1 )
