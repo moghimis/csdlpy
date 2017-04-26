@@ -49,7 +49,7 @@ def timeseries_rmsd (obs_dates, obs_values, mod_dates, mod_values, fig=None):
     refDates, obsValProj, modValProj = valstat.projectTimeSeries(obs_dates, obs_values, 
                                                               mod_dates, mod_values, 
                                                               refStepMinutes)
-    rmsd = valstat.rmse (obsValProj, modValProj) 
+    rmsd = valstat.rms (obsValProj-modValProj) 
     N    = len(obsValProj)
 
     if fig:
