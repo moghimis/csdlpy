@@ -100,8 +100,7 @@ if __name__ == "__main__":
     
     print '[time]: ', dt.now()
     #Grid
-    grid   = readGrid ( \
-            'C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
+    grid   = readGrid ('../adcirc/fort.14')    
     xg = grid['lon']
     yg = grid['lat']
     zg = grid['depth']
@@ -109,8 +108,7 @@ if __name__ == "__main__":
     
     # Data
     print '[time]: ', dt.now()
-    data   = readLonLatVal ( \
-            'C:/Users/sergey.vinogradov/JET/matlab/bias_work/xybias_liang.csv')
+    data   = readLonLatVal ('./xybias.csv')
     x = data[0][:]
     y = data[1][:]
     v = data[2][:]

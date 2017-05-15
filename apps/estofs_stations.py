@@ -5,6 +5,7 @@ Created on Wed Apr 12 16:43:32 2017
 @author: Sergey.Vinogradov
 """
 import sys
+sys.path.insert(0,"/u/Sergey.Vinogradov/git/pySHEF")
 sys.path.insert(0,"/gpfs/hps/nos/noscrub/Sergey.Vinogradov/csdlpy")
 import estofs
 #import csdldata

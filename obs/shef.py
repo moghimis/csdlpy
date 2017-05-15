@@ -16,7 +16,7 @@ import numpy as np
 import csv
 import os,sys
 import csdldata
-
+ 
 #------------------------------------------------------------------------------
 def parse_shef(time_list):
     dicts= defaultdict(lambda: defaultdict(list))
@@ -74,7 +74,7 @@ def load_feet_mllw_to_navd88():
         return pickle.load(f)
 #------------------------------------------------------------------------------
 def time_list():
-    base = dt.date.today() - dt.timedelta(days=1)
+    base = dt.date.today() #- dt.timedelta(days=1)
     date_list = [base - dt.timedelta(days=x) for x in range(0,14)]
     date_list.reverse()
     time_list = [x.strftime("%Y%m%d") for x in date_list]

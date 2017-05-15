@@ -5,10 +5,6 @@ Created on Thu Mar 16 12:59:49 2017
 @author: Sergey.Vinogradov
 """
 import os
-#import obs
-#import adcirc
-#import sys
-#sys.path.insert(0,'/u/Sergey.Vinogradov/nos_noscrub/csdlpy')
 import matplotlib
 matplotlib.use('Agg',warn=False)
 import matplotlib.pyplot as plt
@@ -108,7 +104,7 @@ def getPointsWaterlevel ( ncFile ):
              'time'      : realtime, 
              'base_date' : baseDate, 
              'zeta'      : zeta, 
-             'stations' : stations}        
+             'stations'  : stations}        
 
 #==============================================================================
 def getFieldsWaterlevel ():
@@ -137,10 +133,10 @@ def plotFieldWaterLevel ():
 #==============================================================================
 if __name__ == "__main__":    
 
-    ncFile = '/com/estofs/prod/estofs.20170412/estofs.atl.t00z.points.cwl.nc' 
+    ncFile = 'estofs.atl.t00z.points.cwl.nc' 
     estofs1 = getPointsWaterlevel (ncFile)
 
-    ncFile = '/gpfs/hps/nco/ops/com/estofs/para/estofs_atl.20170412/estofs.atl.t00z.points.cwl.nc'
+    ncFile = 'estofs.atl.t00z.points.cwl.nc'
     estofs2 = getPointsWaterlevel (ncFile)
 
 #    plt.plot (estofs2['lon'], estofs2['lat'],'bo')

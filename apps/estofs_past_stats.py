@@ -40,6 +40,12 @@ def timeseries_rmsd (obs_dates, obs_values, mod_dates, mod_values, fig=None):
     ind = np.argsort(mod_dates)
     mod_dates  = mod_dates[ind]
     mod_values = mod_values[ind]
+    
+    #Rid of mask
+    if hasattr(mod_values,'mask'):
+        ind = ~mod_values.mask
+        mod_dates   = mod_dates[ind]
+        mod_values  = mod_values[ind]
     # Remove nans
     ind = np.logical_not(np.isnan(mod_values))
     mod_dates   = mod_dates[ind]
@@ -49,7 +55,7 @@ def timeseries_rmsd (obs_dates, obs_values, mod_dates, mod_values, fig=None):
     refDates, obsValProj, modValProj = valstat.projectTimeSeries(obs_dates, obs_values, 
                                                               mod_dates, mod_values, 
                                                               refStepMinutes)
-    rmsd = valstat.rms (obsValProj-modValProj) 
+    rmsd = valstat.rmse (obsValProj-modValProj) 
     N    = len(obsValProj)
 
     if fig:
@@ -72,7 +78,7 @@ if __name__ == "__main__":
     # read data
     obs = shef.read_shef()
 
-    val = '2017041600'
+    val = '2017041700'
     startDate = datetime.strptime(val,'%Y%m%d%H')
     endDate   = datetime.utcnow()
     dates = np.arange(startDate, endDate, timedelta(hours=6)).astype(datetime)
@@ -105,40 +111,38 @@ if __name__ == "__main__":
         for coops_id in obs.keys(): #['COOPS-ID']: #estofs2['stations']:
             nSt1 = 0
             print str(coops_id)
-            nSt1 = [i for i, s in enumerate(estofs1['stations']) if coops_id in s][0]
-                if len(nSt1)>0:
-                    stat1 = timeseries_rmsd (obs[coops_id]['dates'], obs[coops_id]['values'], 
-                                             estofs1['time'], estofs1['zeta'][:,nSt1],
-                                             fcst['yyyymmdd'] + '.' + fcst['tHHz'] + '.' + coops_id + '.v1')
-                    rmsd1 = stat1['rmsd']
-                    N1    = stat1['N']
-                    counter1 += 1
-                    rms1 = rms1 + rmsd1    
-                    print 'rmsd1=' + str(rmsd1)                
+            
+            nSt1 = [i for i, s in enumerate(estofs1['stations']) if coops_id in s]
+            nSt2 = [i for i, s in enumerate(estofs2['stations']) if coops_id in s]
 
-                    nSt2 = [i for i, s in enumerate(estofs2['stations']) if coops_id in s][0]
-                    if len(nSt2)>0:
-                        t = estofs2['zeta'][:,nSt2].unshare_mask()
-                        t[t==estofs2['zeta'].fill_value] = np.nan
-                        stat2 = timeseries_rmsd (obs[coops_id]['dates'], obs[coops_id]['values'], 
-                                                 estofs2['time'] + timedelta(seconds=30), t,
-                                                 fcst['yyyymmdd'] + '.' + fcst['tHHz'] + '.' + coops_id + '.v2')
-                        rmsd2 = stat2['rmsd']
-                        N2    = stat2['N']
-                        counter2 += 1
-                        rms2 = rms2 + rmsd2
-                        print 'rmsd2=' + str(rmsd2)                    
-                        printString = coops_id+','+str(d)+','+"".join(str(rmsd1))+','+str(N1)+','+"".join(str(rmsd2))+','+str(N2)+'\n'
-                        print printString
-                        f.write( printString )
-                        if rmsd2 > 1.0:
-                            print str(estofs2['zeta'][:,nSts2])
-                            sys.exit()
+            if len(nSt1) and len(nSt2):
+                nSt1 = nSt1[0]
+                stat1 = timeseries_rmsd (obs[coops_id]['dates'], obs[coops_id]['values'], 
+                                         estofs1['time'], estofs1['zeta'][:,nSt1],
+                                         fcst['yyyymmdd'] + '.' + fcst['tHHz'] + '.' + coops_id + '.v1')
+                rmsd1 = stat1['rmsd']
+                N1    = stat1['N']
+                counter1 += 1
+                rms1 = rms1 + rmsd1    
 
-                    f.flush()
-                    os.fsync(f.fileno()) 
+                nSt2 = nSt2[0]
+                ts = estofs2['zeta'][:,nSt2].unshare_mask()
+                ts = np.array(ts)
+                ts[ts==estofs2['zeta'].fill_value] = np.nan
+                stat2 = timeseries_rmsd (obs[coops_id]['dates'], obs[coops_id]['values'], 
+                                         estofs2['time'] + timedelta(seconds=30), ts,
+                                         fcst['yyyymmdd'] + '.' + fcst['tHHz'] + '.' + coops_id + '.v2')
+                rmsd2 = stat2['rmsd']
+                N2    = stat2['N']
+                counter2 += 1
+                rms2 = rms2 + rmsd2
+                printString = coops_id+','+str(d)+','+"".join(str(rmsd1))+','+str(N1)+','+"".join(str(rmsd2))+','+str(N2)+'\n'
+                print printString
+                f.write( printString )
+                f.flush()
+                os.fsync(f.fileno()) 
             else:        
-                print '[warn]: Station does not exist in V1 ' + str(coops_id)
+                print '[warn]: Skipping ' + str(coops_id)
         
         rmsd1 = rms1/float(counter1)
         rmsd2 = rms2/float(counter2)

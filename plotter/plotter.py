@@ -197,19 +197,9 @@ def plotSurface (grid, surface,
 #==============================================================================
 if __name__ == "__main__":
 
-    grid   = adcirc.readGrid ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/adcirc/fort.14')    
-    maxele = adcirc.readSurfaceField ('C:/Users/sergey.vinogradov/Documents/GitHub/csdlpy/plotter/hsofs.al092008.2008091206.nhctrk.fields.maxele.nc', \
-                                      'zeta_max' ) 
-    
-#    # Demo unmasked array:
-#    lonlim=[-75.8, -75.0]
-#    latlim=[ 35.0,  35.9] 
-#    clim  =[-50.0,  10.0]
-#    cf1 = plotMap ( lonlim=lonlim, latlim=latlim)
-#    cf1 = plotSurface (grid, -1.0*grid['depth'], fig = cf1['fig'],
-#                       clim=clim,
-#                       lonlim=lonlim, latlim=latlim)
-    
+    grid   = adcirc.readGrid ('../adcirc/fort.14')    
+    maxele = adcirc.readSurfaceField ('maxele.nc', 'zeta_max' ) 
+   
     # Demo masked array:    
     lonlim=[-74.5,-71.5]
     latlim=[ 39.9, 41.6]
@@ -222,8 +212,7 @@ if __name__ == "__main__":
 # Data
     from obs.coops import readLonLatVal
 
-    data   = readLonLatVal ( \
-            'C:/Users/sergey.vinogradov/JET/matlab/bias_work/xybias_liang.csv')
+    data   = readLonLatVal ('../interp/xybias.csv')
     cf2 = plotTriangles (data, threshold=0.0,
                    fig=cf2['fig'],  
                    clim=[-0.5, 0.5], lonlim=lonlim, latlim=latlim)

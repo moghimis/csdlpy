@@ -8,29 +8,25 @@ import numpy as np
 from datetime import datetime
 from datetime import timedelta
 
+
 #============================================================================== 
 def nearest(items, pivot):
     """
     Finds an item in 'items' list that is nearest in value to 'pivot'
     """
     nearestVal = min(items, key=lambda x: abs(x - pivot))
-
     try:
-        # First value in loop excepts but then indx is calculated correctly
-        # additional passes in loop use this line.
         items = items.tolist()
     except:
         pass
     indx = items.index(nearestVal)
     return nearestVal, indx
-    #return min(items, key=lambda x: abs(x - pivot))
 
 #==============================================================================
 def rms(V):
     """
     Returns Root Mean Squared of the time series V (np.array)
-    """
-    
+    """    
     ind = np.logical_not(np.isnan(V))
     V = V[ind]
     summ = np.sum(V**2)
@@ -69,30 +65,27 @@ def projectTimeSeries (obsDates, obsVals, modDates, modVals, refStepMinutes=6):
 
     for t in refDates:
         #find t in obsDates within refStep
-        #nearestObsDate = nearest(obsDates, t)
         nearestObsDate, idx = nearest(obsDates, t)
         if abs(nearestObsDate - t) < prec:
-            #nearestObsVal   = obsVals[obsDates==nearestObsDate][0]
             nearestObsVal   = obsVals[idx]
             obsValsProj.append (nearestObsVal)
         else:
             obsValsProj.append (np.nan)
             
-        #nearestModDate = nearest(modDates, t)
         nearestModDate, idx = nearest(modDates, t)
         if abs(nearestModDate - t) < prec:
-            #nearestModVal   = modVals[modDates==nearestModDate][0]
             nearestModVal   = modVals[idx]
             modValsProj.append (nearestModVal)
         else:
             modValsProj.append (np.nan)
-    return refDates, np.array(obsValsProj), np.array(modValsProj )
+    return refDates, np.array(obsValsProj), np.array(modValsProj)
 
 #==============================================================================
 if __name__ == "__main__":
     # Create discontinuous obs time series
+    from datetime import datetime
+    from datetime import timedelta
     import matplotlib.pyplot as plt
-    import matplotlib
     matplotlib.use('Agg',warn=False)    
     
     obsStep  = timedelta(minutes=6)
@@ -131,5 +124,5 @@ if __name__ == "__main__":
                                                             refStepMinutes)
     plt.plot(refDates, obsValsProj,'--go',markerfacecolor='none')
     plt.plot(refDates, modValsProj,'--bo',markerfacecolor='none')
-    print rms(obsValsProj-modValsProj)    
+    print rmse(obsValsProj, modValsProj)    
     
