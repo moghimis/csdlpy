@@ -5,7 +5,7 @@ Created on Wed Apr 16 2017
 @author: Sergey.Vinogradov
 """
 import sys, os
-sys.path.insert(0,"/gpfs/hps/nos/noscrub/Sergey.Vinogradov/csdlpy")
+sys.path.insert(0,"./csdlpy")
 import estofs
 import valstat
 #import csdldata
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
     fcst = estofs.latestForecast()
     nowFile = fcst['yyyymmdd']+'.'+fcst['tHHz']  
-    ncFile = '/gpfs/hps/nco/ops/com/estofs/prod/estofs_atl.' + fcst['yyyymmdd'] + '/estofs.atl.' + fcst['tHHz'] + '.points.cwl.nc'
+    ncFile = '/prod/estofs_atl.' + fcst['yyyymmdd'] + '/estofs.atl.' + fcst['tHHz'] + '.points.cwl.nc'
     estofs = estofs.getPointsWaterlevel (ncFile)
     
     counter = 0
@@ -133,6 +133,5 @@ if __name__ == "__main__":
     os.system(command)
     command = 'rm -rf ts.*.png'
     os.system(command)
-    print 'scp -P 55840 ' + nowFile + '.tar.gz Sergey.Vinogradov@localhost:/scratch4/NOS/nosofs/Sergey.Vinogradov/incoming/.'
 
 
