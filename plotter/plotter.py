@@ -10,6 +10,13 @@ import matplotlib.pyplot as plt
 import matplotlib.tri    as tri
 from mpl_toolkits.basemap import Basemap
 
+import os
+import string
+import cartopy
+from cartopy.feature import NaturalEarthFeature, LAND, COASTLINE
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
+from cartopy.io.img_tiles import StamenTerrain
+
 #==============================================================================
 def plotTimeSeries ():
     print '[error]: not yet implemented'
@@ -19,10 +26,89 @@ def plotScatter ():
     print '[error]: not yet implemented'
 
 #==============================================================================
+def plotMapC (fig=None, lonlim=[-98.0, -53.8], latlim=[5.8, 46.0],
+                      mapResolution='c', figsize=[9,9],
+                      layer='BlueMarble_ShadedRelief'):
+    """
+    Plots a geographic map using Cartopy package
+    Args:
+    Optional:
+        fig (plt.figure)       : figure handle
+        lonlim([float, float]) : longitude limits, ([min, max] = default)
+        latlim([float, float]) : latitude  limits, ([min, max] = default)
+        
+        
+        layer could be one of:
+           None: use default image (low res)
+           'BM':   for local Blue marble
+           one of these for downloading from NASA web page:
+             ['BlueMarble_NextGeneration', 'VIIRS_CityLights_2012',
+             'Reference_Features', 'Sea_Surface_Temp_Blended', 'MODIS_Terra_Aerosol',
+             'Coastlines', 'BlueMarble_ShadedRelief', 'BlueMarble_ShadedRelief_Bathymetry']
+    
+    
+    Returns:
+        m (Basemap handle) 
+        fig (plt.figure handle)
+    """
+    
+    print '[info]: Plotting the Map.'    
+    dx = lonlim[1]-lonlim[0]
+    
+    #Set resolution depending on longitudinal swath
+    dparallels, dmeridians = 10., 10.    
+    if mapResolution == 'c':
+        if dx <= 50.0:
+            mapResolution = '50m'  #'110m'
+            dparallels = dmeridians = 5.0
+        if dx <= 15.0:
+            mapResolution = '50m'
+            dparallels = dmeridians = 2.0
+        if dx <=  5.0:
+            mapResolution = '10m'
+            dparallels = dmeridians = 1.0
+        print '[info]: Resolution is set to ' + mapResolution
+               
+    if fig is None:
+        fig = plt.figure(figsize=figsize)    
+
+    ax = fig.add_axes([0.1,0.1,0.85,0.85],projection=cartopy.crs.PlateCarree())
+    extents = np.array([lonlim,latlim]).flatten()
+    ax.set_extent(extents)
+    ax.coastlines(mapResolution)
+
+    layers = ['BlueMarble_NextGeneration', 'VIIRS_CityLights_2012',
+             'Reference_Features', 'Sea_Surface_Temp_Blended', 'MODIS_Terra_Aerosol',
+             'Coastlines', 'BlueMarble_ShadedRelief', 'BlueMarble_ShadedRelief_Bathymetry']
+    if layer == 'BM':
+        print '[info]: Use BlueMarble: Cartopy 0.15 or newer is needed' 
+        #generate path to csdlpy location
+        path =  os.path.abspath(adcirc.__file__).split('/')[:-2]
+        path = string.join(path,'/')
+        os.environ["CARTOPY_USER_BACKGROUNDS"] = os.path.join(path,'BG/')
+        ax.background_img(name='BM', resolution='high')
+    elif layer in layers :
+        print '[info]: Downloading from NASA: layer = ', layer
+        url = 'http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi'
+        ax.add_wmts(url, layer_name=layer)
+    else:
+        ax.stock_img()
+ 
+    ax.add_feature(cartopy.feature.LAKES, alpha=0.5)
+    ax.add_feature(cartopy.feature.RIVERS)
+        
+    gl = ax.gridlines(draw_labels=True)
+    gl.xlabels_top = False
+    gl.ylabels_right = False
+    gl.xformatter = LONGITUDE_FORMATTER
+    gl.yformatter = LATITUDE_FORMATTER
+    return {'map' : ax, 'fig' : fig}
+
+#==============================================================================
 def plotMap (fig=None, lonlim=[-98.0, -53.8], latlim=[5.8, 46.0],
                       mapResolution='c', figsize=[9,9]):
     """
-    Plots a geographic map
+    Plots a geographic map using Basemap package
     Args:
     Optional:
         fig (plt.figure)       : figure handle
@@ -204,10 +290,19 @@ if __name__ == "__main__":
     lonlim=[-74.5,-71.5]
     latlim=[ 39.9, 41.6]
     clim = [  -0.5, 0.5]
+    
+    #using Basemap
     cf2 = plotMap     ( lonlim=lonlim, latlim=latlim)
     cf2 = plotSurface (grid, maxele['value'], fig = cf2['fig'],
                        clim=clim,
                        lonlim=lonlim, latlim=latlim)
+
+    #using Cartopy for BlueMarble background
+    cf2 = plotMapC    ( lonlim=lonlim, latlim=latlim, layer='BM')
+    cf2 = plotSurface (grid, maxele['value'], fig = cf2['fig'],
+                       clim=clim,
+                       lonlim=lonlim, latlim=latlim)    
+
     
 # Data
     from obs.coops import readLonLatVal
