@@ -30,14 +30,14 @@ def plotMapC (fig=None, lonlim=[-98.0, -53.8], latlim=[5.8, 46.0],
                       mapResolution='c', figsize=[9,9],
                       layer='BlueMarble_ShadedRelief'):
     """
+    @author: moghimis@gmail.com
     Plots a geographic map using Cartopy package
     Args:
     Optional:
         fig (plt.figure)       : figure handle
         lonlim([float, float]) : longitude limits, ([min, max] = default)
         latlim([float, float]) : latitude  limits, ([min, max] = default)
-        
-        
+                
         layer could be one of:
            None: use default image (low res)
            'BM':   for local Blue marble
@@ -45,8 +45,6 @@ def plotMapC (fig=None, lonlim=[-98.0, -53.8], latlim=[5.8, 46.0],
              ['BlueMarble_NextGeneration', 'VIIRS_CityLights_2012',
              'Reference_Features', 'Sea_Surface_Temp_Blended', 'MODIS_Terra_Aerosol',
              'Coastlines', 'BlueMarble_ShadedRelief', 'BlueMarble_ShadedRelief_Bathymetry']
-    
-    
     Returns:
         m (Basemap handle) 
         fig (plt.figure handle)
